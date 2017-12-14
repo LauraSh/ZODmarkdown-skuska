@@ -33,7 +33,7 @@ subplot(rows,cols,s);s=s+1;imshow(Aef);title(['edges: ', num2str(sum(Aef(:))), '
 ![](media/kytka.png)
 
 
-## Autofocus – hledani nejostřejších snimku ve videu
+## Autofocus – finding sharpest frames of a video
 
 ``` matlab
 v = VideoReader('podzimni_kvetena_focus_test.mp4');
@@ -42,14 +42,14 @@ vHeight = v.Height;
 vWidth = v.Width;
 ```
 
-### smerodatnou odchylku urcuji jen z prostredni ctvrtiny
+### determining the standard deviation of the middle quarter
 ```
 
 centerX = [vHeight/4:vHeight*3/4];
 centerY = [vWidth/4:vWidth*3/4];
 ```
 
-### struktura pro nacitani jednotlivych framu
+### struct to load each frame
 
 ``` matlab
 s = struct('frame',zeros(vHeight,vWidth,3,'uint8'));
@@ -62,11 +62,11 @@ while hasFrame(v)
 
 f = readFrame(v);
 
-% ulozim frame
+% saving frame
 
 s(k).frame = f;
 
-% soucet smerodatnych odchylek ve vyrezu framu
+% sum of standard deviations in a frame cutout
 
 A = [A sum(sum(std(double(f(centerX,centerY)))))];
 
@@ -76,49 +76,43 @@ end
 
 [m,i] = max(A);
 
-D = ['Nejostrejsi se zda byt ',num2str(i),'. snimek.'];
+D = ['Sharpest one probably: ',num2str(i),'. snimek.'];
 
 disp(D)
 
 ```
 
-### zobrazeni nejostrejsiho snimku
-
+### sharpest frame display
 ```matlab
 
 imshow(s(i).frame);
 
 ```
 
-### generovani vysledku
+### write results 
 
 ``` matlab
 
 w = VideoWriter('autofocus');
-
 open(w);
-```
 
-### video jede kousek za nejostrejsi
-``` matlab
+% the video goes a little bit past sharpest frame
 
 for k = 1:i+10
 
 writeVideo(w, s(k).frame);
 
 end
-```
-### pak zpet k nemu
-``` matlab
+
+% then returns
 
 for k = 1:9
 
 writeVideo(w, s(i+10-k).frame);
 
 end
-```
-### a chvili na nem
-``` matlab
+
+% and stays a while
 
 for k = 1:9
 
