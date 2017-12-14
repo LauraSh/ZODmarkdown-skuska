@@ -1,7 +1,7 @@
 
 # Image sharpness detection and autofocus 
 
->This document works with [image](/zodoc/assets/img/kytka256.jpg) in `A` variable.
+>This document works with [image](media/kytka256.jpg) in `A` variable and [video](media/podzimni_kvetena_focus_test.mp4) in `v` variable.
  If you have MATLAB2015a or newer version, use *imgaussfilt(A, sigma)* instead of *fspecial()* and *imfilter()*.
 
 ## detect image sharpness -> use edges to compare sharpness of 2 images
